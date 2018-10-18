@@ -1,0 +1,31 @@
+{
+  "name": "totem-angular",
+  "version": "1.0.0",
+  "description": "Totem ClickAndCollect",
+  "main": "main.js",
+  "repository": "https://github.com/esjuanma/haskell",
+  "scripts": {
+    "start": "electron main.js",
+    "buildall": "electron-packager . --all --overwrite",
+    "buildw64": "electron-packager . --platform=win32 --arch=x64 --overwrite",
+    "buildl64": "electron-packager . --platform=linux --arch=x64 --overwrite",
+    "build": "build --win",
+    "ship": "build --win -p always"
+  },
+  "author": "Juan",
+  "license": "ISC",
+  "devDependencies": {
+    "devtron": "^1.2.1",
+    "electron-builder": "^20.28.4",
+    "electron-packager": "^7.0.2",
+    "electron-prebuilt": "^1.0.1",
+    "gulp": "^3.9.1",
+    "gulp-connect": "^4.0.0",
+    "gulp-sass": "^4.0.2"
+  },
+  "dependencies": {
+    "electron-debug": "^1.0.1",
+    "electron-updater": "^3.1.2"
+  },
+  "keywords": []
+}

@@ -1,0 +1,8 @@
+node_modules/
+dist/
+totem-angular-darwin-x64/
+totem-angular-linux-ia32/
+totem-angular-linux-x64/
+totem-angular-mas-x64/
+totem-angular-win32-ia32/
+totem-angular-win32-x64/
