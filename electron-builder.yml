@@ -1,4 +1,0 @@
-appId: Auto.Updater.John
-publish:
-    provider: github
-    token: ada25e6179902851fea6487018fbab3a38bf3235 
