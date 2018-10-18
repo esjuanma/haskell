@@ -6,3 +6,4 @@ totem-angular-linux-x64/
 totem-angular-mas-x64/
 totem-angular-win32-ia32/
 totem-angular-win32-x64/
+electron-builder.yml
