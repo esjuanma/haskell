@@ -7,10 +7,10 @@
 	
 	<body>
 		<div id="version">Version: v1.0.4</div>
-		
-		<div id="feed-url">Feed URL: <span>...</span></div>
-		
+				
 		<button id="console" onClick="ipcRenderer.send('quitAndInstall')">Console: <span>...</span></button>
+		
+		<button onClick="ipcRenderer.send('checkFor')">Check for</button>
 
 		<script type="text/javascript">
 		
@@ -18,10 +18,6 @@
 			
 			ipcRenderer.on('state-change', function(event, text) {
 				document.querySelector('#console span').innerHTML = text;
-			});
-			
-			ipcRenderer.on('feed-url-ready', function(event, text) {
-				document.querySelector('#feed-url span').innerHTML = text;
 			});
 
 		</script>

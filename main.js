@@ -1,14 +1,15 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const { autoUpdater } = require('electron-updater');
+
 let mainWindow;
 
 // creates the default window
 function createWindow() {
     mainWindow = new BrowserWindow({
-        width: 1024,
-        height: 768,
+        width: 600,
+        height: 200,
         frame: false,
-        alwaysOnTop: true
+        alwaysOnTop: false
     });
 
     mainWindow.loadURL(`file://${__dirname}/app/index.html`);
@@ -18,24 +19,84 @@ function createWindow() {
     return mainWindow;
 }
 
+const updatePlease = () => {
+    if(autoUpdater.checkForUpdatesAndNotify) {
+        mainWindow.webContents.send('state-change', 'Checking for update and then notify');
+        setTimeout(() => autoUpdater.checkForUpdatesAndNotify(), 1000);
+    } else {
+        mainWindow.webContents.send('state-change', 'Just checking for updates');
+        setTimeout(() => autoUpdater.checkForUpdates(), 1000);
+    }
+};
+
 // when the app is loaded create a BrowserWindow and check for updates
 app.on('ready', function () {
     createWindow();
 
-    if(autoUpdater.checkForUpdatesAndNotify) {
-        mainWindow.webContents.send('state-change', 'Checking for update and then notify');
-        autoUpdater.checkForUpdatesAndNotify();
-    } else {
-        mainWindow.webContents.send('state-change', 'No update and notify');
-        autoUpdater.checkForUpdates();
-    }
+    mainWindow.webContents.send('state-change', 'ready');
+    
+    setTimeout(() => {
+        mainWindow.webContents.send('state-change', 'Timedout!');
+        
+        // Shows feed URL
+        mainWindow.webContents.send('feed-url-ready', autoUpdater.getFeedURL());
 
-    // Shows feed URL
-    mainWindow.webContents.send('feed-url-ready', autoUpdater.getFeedURL());
+        setTimeout(updatePlease, 1000);
+    }, 3000);
 });
+
+
+autoUpdater.on('-1', (info) => {
+    mainWindow.webContents.send('state-change', '-1 ok');
+});
+
+autoUpdater.on('0', (info) => {
+    mainWindow.webContents.send('state-change', '0 ok');
+});
+
+autoUpdater.on('1', (info) => {
+    mainWindow.webContents.send('state-change', '1 ok');
+});
+
+autoUpdater.on('2', (info) => {
+    mainWindow.webContents.send('state-change', '2 ok');
+});
+
+autoUpdater.on('downloaded', (info) => {
+    mainWindow.webContents.send('state-change', 'downloaded');
+});
+
+
+
+
+
+
+autoUpdater.on('doCheckForUpdates-starting', (ifo) => {
+    mainWindow.webContents.send('state-change', 'doCheckForUpdates-starting');
+});
+
+
+autoUpdater.on('doCheckForUpdates-bluebird', () => {
+    mainWindow.webContents.send('state-change', 'doCheckForUpdates-bluebird');
+});
+
+
+autoUpdater.on('getUpdateInfo', () => {
+    mainWindow.webContents.send('state-change', 'getUpdateInfo');
+});
+
+
 
 autoUpdater.on('checking-for-update', (info) => {
     mainWindow.webContents.send('state-change', 'Checking for update..');
+});
+
+autoUpdater.on('checkForUpdatesPromise-done', (info) => {
+    mainWindow.webContents.send('state-change', 'checkForUpdatesPromise done!');
+});
+
+autoUpdater.on('checkForUpdatesPromise-then', (info) => {
+    mainWindow.webContents.send('state-change', 'checkForUpdatesPromise then!');
 });
 autoUpdater.on('update-available', (info) => {
     mainWindow.webContents.send('state-change', 'Update available!');
@@ -43,15 +104,17 @@ autoUpdater.on('update-available', (info) => {
 autoUpdater.on('update-not-available', (info) => {
     mainWindow.webContents.send('state-change', 'Update not available.');
 });
-// when the update has been downloaded and is ready to be installed, notify the BrowserWindow
 autoUpdater.on('update-downloaded', (info) => {
     mainWindow.webContents.send('state-change', 'Update downloaded');
 });
-
-// when receiving a quitAndInstall signal, quit and install the new version ;)
 ipcMain.on('quitAndInstall', (event, arg) => {
     autoUpdater.quitAndInstall();
     mainWindow.webContents.send('state-change', 'Quiting and installing..');
+});
+
+ipcMain.on('checkFor', (event, arg) => {
+    updatePlease();
+    mainWindow.webContents.send('state-change', 'OK dude');
 });
 
 // https..
