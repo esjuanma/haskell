@@ -1,7 +1,7 @@
 {
-  "name": "totem-angular",
-  "version": "1.0.0",
-  "description": "Totem ClickAndCollect",
+  "name": "electron-auto-reload",
+  "version": "1.0.4",
+  "description": "Just an Electron auto update text",
   "main": "main.js",
   "repository": "https://github.com/esjuanma/haskell",
   "scripts": {
@@ -15,16 +15,15 @@
   "author": "Juan",
   "license": "ISC",
   "devDependencies": {
-    "devtron": "^1.2.1",
     "electron-builder": "^20.28.4",
     "electron-packager": "^7.0.2",
     "electron-prebuilt": "^1.0.1",
     "gulp": "^3.9.1",
     "gulp-connect": "^4.0.0",
-    "gulp-sass": "^4.0.2"
+    "gulp-sass": "^4.0.2",
+    "electron-debug": "^1.0.1"
   },
   "dependencies": {
-    "electron-debug": "^1.0.1",
     "electron-updater": "^3.1.2"
   },
   "keywords": []

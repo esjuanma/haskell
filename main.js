@@ -20,18 +20,38 @@ function createWindow() {
 
 // when the app is loaded create a BrowserWindow and check for updates
 app.on('ready', function () {
-    createWindow()
-    autoUpdater.checkForUpdates();
+    createWindow();
+
+    if(autoUpdater.checkForUpdatesAndNotify) {
+        mainWindow.webContents.send('state-change', 'Checking for update and then notify');
+        autoUpdater.checkForUpdatesAndNotify();
+    } else {
+        mainWindow.webContents.send('state-change', 'No update and notify');
+        autoUpdater.checkForUpdates();
+    }
+
+    // Shows feed URL
+    mainWindow.webContents.send('feed-url-ready', autoUpdater.getFeedURL());
 });
 
+autoUpdater.on('checking-for-update', (info) => {
+    mainWindow.webContents.send('state-change', 'Checking for update..');
+});
+autoUpdater.on('update-available', (info) => {
+    mainWindow.webContents.send('state-change', 'Update available!');
+});
+autoUpdater.on('update-not-available', (info) => {
+    mainWindow.webContents.send('state-change', 'Update not available.');
+});
 // when the update has been downloaded and is ready to be installed, notify the BrowserWindow
 autoUpdater.on('update-downloaded', (info) => {
-    mainWindow.webContents.send('updateReady')
+    mainWindow.webContents.send('state-change', 'Update downloaded');
 });
 
 // when receiving a quitAndInstall signal, quit and install the new version ;)
-ipcMain.on("quitAndInstall", (event, arg) => {
+ipcMain.on('quitAndInstall', (event, arg) => {
     autoUpdater.quitAndInstall();
+    mainWindow.webContents.send('state-change', 'Quiting and installing..');
 });
 
 // https..

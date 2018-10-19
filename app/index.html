@@ -6,16 +6,25 @@
 	</head>
 	
 	<body>
-		v1.0.1
+		<div id="version">Version: v1.0.4</div>
+		
+		<div id="feed-url">Feed URL: <span>...</span></div>
+		
+		<button id="console" onClick="ipcRenderer.send('quitAndInstall')">Console: <span>...</span></button>
 
 		<script type="text/javascript">
-			const {webFrame} = require('electron');
-			webFrame.setZoomLevelLimits(1, 1)
+		
+			const ipcRenderer = require('electron').ipcRenderer;
+			
+			ipcRenderer.on('state-change', function(event, text) {
+				document.querySelector('#console span').innerHTML = text;
+			});
+			
+			ipcRenderer.on('feed-url-ready', function(event, text) {
+				document.querySelector('#feed-url span').innerHTML = text;
+			});
+
 		</script>
-
-		<script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
-
-		<script>if (window.module) module = window.module;</script>
 
 	</body>
 
